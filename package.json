@@ -1,0 +1,21 @@
+{
+  "name": "kitchen_sync",
+  "version": "0.1.0",
+  "description": "Sync a Directory to a remote server using sftp (Mainly for use with Pantheon Multidev environments)",
+  "main": "kitchen_sync.js",
+  "dependencies": {
+    "chokidar": "^1.0.1",
+    "command-line-args": "^0.5.9",
+    "shelljs": "^0.4.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "kitchen_sync -t"
+  },
+  "keywords": [
+    "sync",
+    "sftp"
+  ],
+  "author": "Ray Imber <ray.imber@galavantier.com> (http://www.galvantier.com/)",
+  "license": "ISC"
+}
