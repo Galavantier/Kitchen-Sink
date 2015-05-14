@@ -1,0 +1,28 @@
+#Kitchen Sync
+####Sync a local directory to a remote server using sftp (Mainly for use with Pantheon Multidev environments)
+
+##Installation
+```
+git clone https://github.com/Galavantier/Kitchen-Sink.git
+cd <code-directory>
+npm install -g
+chmod +x ./kitchen_sync.js
+
+# add kitchen_sync.js to your bin directory
+```
+
+##Usage
+```
+  --help                  Print usage instructions.
+  --host <string>         The SSH hostname.
+  --port <string>         The SSH port to use.
+  --localDir <string>     The Local Directory to watch.
+  --remoteDir <string>    The Remote Directory to sync with.
+  --ignore <array>        A comma seperated list of filepath patterns to
+                          ignore. We ALWAYS ignore paths that start with a '.'
+```
+
+##Example
+```
+./kitchen_sync.js --host multidev-env.got-pantheon.io --port 23 --localDir ~/Documents/sites/code/ --remoteDir code --ignore '**/sites/default/**'
+```
