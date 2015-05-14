@@ -21,7 +21,7 @@
     "sync",
     "sftp"
   ],
-  "bin" : { "setup-travis" : "./setup-travis.js" },
+  "bin" : { "kitchen-sync" : "./kitchen-sync.js" },
   "preferGlobal" : true,
   "author": "Ray Imber <ray.imber@galavantier.com> (http://www.galvantier.com/)",
   "license": "ISC",
