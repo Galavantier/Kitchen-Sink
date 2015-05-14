@@ -26,3 +26,9 @@ chmod +x ./kitchen_sync.js
 ```
 ./kitchen_sync.js --host multidev-env.got-pantheon.io --port 23 --localDir ~/Documents/sites/code/ --remoteDir code --ignore '**/sites/default/**'
 ```
+
+##Notes
+- If you get a login error, or the script hangs, try to run sftp directly and manually log in.
+
+The script does not support auto log-in at the moment, so you either need to have your SSH key setup so that
+you do not need to authenticate, or you need to log in with ssh or sftp manually first.
