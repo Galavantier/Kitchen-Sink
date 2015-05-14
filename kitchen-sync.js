@@ -67,7 +67,11 @@ var watcher = chokidar.watch(options.localDir, { ignoreInitial: true, ignored: (
 syncConfig.forEach(function(config) {
   config.events.forEach(function(evnt, index) {
     watcher.on(evnt, function(path) {
-      runSftp((Array.isArray(config.cmds)) ? config.cmds[index] : config.cmds, config.args(path)).then(function(output) { log(config.title, getRelativePath(path)); });
+      var cmd  = (Array.isArray(config.cmds)) ? config.cmds[index] : config.cmds;
+      var args = (Array.isArray(config.args)) ? config.args[index](path) : config.args(path);
+
+      runSftp(cmd, args)
+        .then(function(output) { log(config.title, getRelativePath(path)); });
     });
   });
 });
