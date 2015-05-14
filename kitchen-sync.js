@@ -17,8 +17,8 @@ var cli = cliArgs([
 
 /* define the synchronization configuration options. Maps file watcher events to sftp commands. */
 var syncConfig = [
-  { title : 'Updated', events : ['change', 'add'], cmds : ['put'], args : function(path) { return [path, getRemotePath(path)]; } },
-  { title : 'Created', events : ['addDir'], cmds : ['mkdir'], args : function(path) { return [getRemotePath(path)]; } },
+  { title : 'Updated', events : ['change', 'add'], cmds : 'put', args : function(path) { return [path, getRemotePath(path)]; } },
+  { title : 'Created', events : ['addDir'], cmds : 'mkdir', args : function(path) { return [getRemotePath(path)]; } },
   { title : 'Deleted', events : ['unlink', 'unlinkDir'], cmds : ['rm', 'rmdir'], args : function(path) { return [getRemotePath(path)]; } }
 ];
 
@@ -67,7 +67,7 @@ var watcher = chokidar.watch(options.localDir, { ignoreInitial: true, ignored: (
 syncConfig.forEach(function(config) {
   config.events.forEach(function(evnt, index) {
     watcher.on(evnt, function(path) {
-      runSftp(config.cmds[index], config.args(path)).then(function(output) { log(config.title, getRelativePath(path)); });
+      runSftp((Array.isArray(config.cmds)) ? config.cmds[index] : config.cmds, config.args(path)).then(function(output) { log(config.title, getRelativePath(path)); });
     });
   });
 });
