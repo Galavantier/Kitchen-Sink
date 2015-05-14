@@ -13,10 +13,16 @@
   "scripts": {
     "test": "kitchen_sync -t"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Galavantier/Kitchen-Sink.git"
+  },
   "keywords": [
     "sync",
     "sftp"
   ],
+  "bin" : { "setup-travis" : "./setup-travis.js" },
+  "preferGlobal" : true,
   "author": "Ray Imber <ray.imber@galavantier.com> (http://www.galvantier.com/)",
-  "license": "ISC"
+  "license": "ISC",
 }
