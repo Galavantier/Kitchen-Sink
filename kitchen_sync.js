@@ -15,6 +15,13 @@ var cli = cliArgs([
     { name: "ignore", type: Array, description: "A comma seperated list of filepath patterns to ignore. We ALWAYS ignore paths that start with a '.'" }
 ]);
 
+/* define the synchronization configuration options. Maps file watcher events to sftp commands. */
+var syncConfig = [
+  { title : 'Updated', events : ['change', 'add'], cmds : ['put'], args : function(path) { return [path, getRemotePath(path)]; } },
+  { title : 'Created', events : ['addDir'], cmds : ['mkdir'], args : function(path) { return [getRemotePath(path)]; } },
+  { title : 'Deleted', events : ['unlink', 'unlinkDir'], cmds : ['rm', 'rmdir'], args : function(path) { return [getRemotePath(path)]; } }
+];
+
 /* parse the supplied command-line values */
 var options = cli.parse();
 
@@ -29,6 +36,7 @@ if(options.help) {
   return;
 }
 
+//----------------- Utility Functions --------------------------------------------------------------------------------//
 var homeDir = exec('echo ~', {silent:true}).output;
 
 var getRelativePath = function(localPath) { return localPath.replace(options.localDir.replace('~', homeDir), ''); };
@@ -50,15 +58,12 @@ var runSftp = function(cmd, args) {
 };
 
 var log = function(title, path) { console.log(title + " " + path); };
+//--------------------------------------------------------------------------------------------------------------------//
 
-var syncConfig = [
-  { title : 'Updated', events : ['change', 'add'], cmds : ['put'], args : function(path) { return [path, getRemotePath(path)]; } },
-  { title : 'Created', events : ['addDir'], cmds : ['mkdir'], args : function(path) { return [getRemotePath(path)]; } },
-  { title : 'Deleted', events : ['unlink', 'unlinkDir'], cmds : ['rm', 'rmdir'], args : function(path) { return [getRemotePath(path)]; } }
-];
-
+/* Initialize the File Watcher */
 var watcher = chokidar.watch(options.localDir, { ignoreInitial: true, ignored: (typeof options.ignore !== 'undefined') ? [/[\/\\]\./].concat(options.ignore) : /[\/\\]\./ });
 
+/* Attach all the syncConfig options  */
 syncConfig.forEach(function(config) {
   config.events.forEach(function(evnt, index) {
     watcher.on(evnt, function(path) {
@@ -67,6 +72,7 @@ syncConfig.forEach(function(config) {
   });
 });
 
+/* Add an init handler and an error handler. */
 watcher
   .on('error', function(error) { console.error('Error happened', error); })
   .on('ready', function() { console.log('Initial scan complete. Ready for changes.'); });
