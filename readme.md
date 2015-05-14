@@ -6,7 +6,7 @@
 git clone https://github.com/Galavantier/Kitchen-Sink.git
 cd <code-directory>
 npm install -g
-chmod +x ./kitchen_sync.js
+chmod +x ./kitchen-sync.js
 
 # optionally add kitchen_sync.js to your bin directory
 ```
@@ -24,7 +24,7 @@ chmod +x ./kitchen_sync.js
 
 ##Example
 ```
-./kitchen_sync.js --host multidev-env.got-pantheon.io --port 23 --localDir ~/Documents/sites/code/ --remoteDir code --ignore '**/sites/default/**'
+./kitchen-sync.js --host multidev-env.got-pantheon.io --port 23 --localDir ~/Documents/sites/code/ --remoteDir code --ignore '**/sites/default/**'
 ```
 
 ##Notes
