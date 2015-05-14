@@ -8,7 +8,7 @@ cd <code-directory>
 npm install -g
 chmod +x ./kitchen-sync.js
 
-# optionally add kitchen_sync.js to your bin directory
+# optionally add kitchen-sync.js to your bin directory
 ```
 
 ##Usage
