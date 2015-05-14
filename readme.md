@@ -33,3 +33,10 @@ chmod +x ./kitchen-sync.js
 
 The script does not support auto log-in at the moment, so you either need to have your SSH key setup so that
 you do not need to authenticate, or you need to log in with ssh or sftp manually first.
+
+##Dependencies
+This project is built on the shoulders of giants:
+ - chokidar (https://github.com/paulmillr/chokidar)
+ - command-line-args (https://github.com/75lb/command-line-args)
+ - promiscuous (https://github.com/RubenVerborgh/promiscuous)
+ - shelljs (https://github.com/arturadib/shelljs)
