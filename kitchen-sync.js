@@ -48,7 +48,7 @@ var getRemotePath = function(localPath) {
 
 var runSftp = function(cmd, args) {
   return new Promise(function (resolve, reject) {
-    exec('sftp -o Port=' + options.port + ' ' + options.host + ' <<<"' + cmd + ' ' + args.join(' ') + '"',
+    exec('echo "' + cmd + ' ' + args.join(' ') + '"' + ' | ' + 'sftp -o Port=' + options.port + ' ' + options.host + " ",  
         {silent:true, async:true},
         function(code, output) {
           var result = (code < 1) ? resolve(output) : reject(output);
@@ -69,9 +69,9 @@ syncConfig.forEach(function(config) {
     watcher.on(evnt, function(path) {
       var cmd  = (Array.isArray(config.cmds)) ? config.cmds[index] : config.cmds;
       var args = (Array.isArray(config.args)) ? config.args[index](path) : config.args(path);
-
+      // console.log(path + "aaaaaaaaaaa");
       runSftp(cmd, args)
-        .then(function(output) { log(config.title, getRelativePath(path)); });
+        .then(function(output) { log(config.title, getRelativePath(path)); }, function(failure) {console.log(failure)});
     });
   });
 });
