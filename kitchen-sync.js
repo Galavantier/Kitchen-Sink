@@ -12,7 +12,8 @@ var cli = cliArgs([
     { name: "port", type: String, description: "The SSH port to use." },
     { name: "localDir", type: String, defaultOption : true, description: "The Local Directory to watch." },
     { name: "remoteDir", type: String, description: "The Remote Directory to sync with." },
-    { name: "ignore", type: Array, description: "A comma seperated list of filepath patterns to ignore. We ALWAYS ignore paths that start with a '.'" }
+    { name: "ignore", type: Array, description: "A comma seperated list of filepath patterns to ignore. We ALWAYS ignore paths that start with a '.'" },
+    { name: "logRaw", type: Boolean, description: "Whether to log the raw output from the underlying ftp commands or not." }
 ]);
 
 /* define the synchronization configuration options. Maps file watcher events to sftp commands. */
@@ -43,12 +44,13 @@ var getRelativePath = function(localPath) { return localPath.replace(options.loc
 
 var getRemotePath = function(localPath) {
   remotePath = (typeof options.remoteDir !== 'undefined') ? options.remoteDir : '';
+  remotePath = (remotePath.slice(-1) !== "/") ? remotePath + "/" : remotePath;
   return remotePath + getRelativePath(localPath);
 };
 
 var runSftp = function(cmd, args) {
   return new Promise(function (resolve, reject) {
-    exec('echo "' + cmd + ' ' + args.join(' ') + '"' + ' | ' + 'sftp -o Port=' + options.port + ' ' + options.host + " ",  
+    exec('echo "' + cmd + ' ' + args.join(' ') + '"' + ' | ' + 'sftp -o Port=' + options.port + ' ' + options.host + " ",
         {silent:true, async:true},
         function(code, output) {
           var result = (code < 1) ? resolve(output) : reject(output);
@@ -69,9 +71,8 @@ syncConfig.forEach(function(config) {
     watcher.on(evnt, function(path) {
       var cmd  = (Array.isArray(config.cmds)) ? config.cmds[index] : config.cmds;
       var args = (Array.isArray(config.args)) ? config.args[index](path) : config.args(path);
-      // console.log(path + "aaaaaaaaaaa");
       runSftp(cmd, args)
-        .then(function(output) { log(config.title, getRelativePath(path)); }, function(failure) {console.log(failure)});
+        .then(function(output) { log(config.title, getRelativePath(path)); }, function(failure) {console.log(failure);});
     });
   });
 });
